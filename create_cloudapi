@@ -1,0 +1,18 @@
+#!/bin/bash
+cat <<EOM | sapiadm provision
+{
+    "service_uuid": "$(sdc-sapi /services?name=cloudapi | json -aH uuid)",
+    "params": {
+        "alias" : "cloudapi0",
+        "networks": [
+            {
+                "uuid": "$(sdc-napi /networks?name=admin | json -H 0.uuid)"
+            },
+            {
+                "uuid": "$(sdc-napi /networks?name=external | json -H 0.uuid)",
+                "primary": true
+            }
+        ]
+    }
+}
+EOM

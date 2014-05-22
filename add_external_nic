@@ -1,0 +1,15 @@
+#!/bin/bash
+ 
+[[ -z "$1" ]] && echo "Usage: $0 <VM UUID>" && exit 1
+EXTERNAL=$(sdc-napi --no-headers /networks?name=external | json -a uuid)
+[[ -z $EXTERNAL ]] && echo "No external network found!" && exit 1
+ 
+sdc-vmapi /vms/$1 -X POST --data-binary @- <<EOF
+{
+  "action": "add_nics",
+  "networks": [
+    { "uuid": "${EXTERNAL}",
+      "primary": true }
+  ]
+}
+EOF
