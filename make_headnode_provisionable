@@ -1,3 +1,4 @@
+#!/usr/bin/bash -ax
 
 function hack_dapi_for_headnode_provisioning {
 
@@ -6,6 +7,7 @@ function hack_dapi_for_headnode_provisioning {
     # TODO: don't change if already done
     echo "# Hack DAPI to allow headnode provisioning"
     local config_path=/zones/$cnapi_zone/root/opt/smartdc/cnapi/sapi_manifests/cnapi/template
+grep hard-filter-headnode $config_path || exit
 
     sed -e "
         s:hard-filter-headnode:identity:g;
@@ -16,3 +18,5 @@ function hack_dapi_for_headnode_provisioning {
     mv $config_path.new $config_path
     svcadm -z $cnapi_zone restart config-agent
 }
+
+hack_dapi_for_headnode_provisioning
