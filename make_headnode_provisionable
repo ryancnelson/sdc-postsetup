@@ -1,4 +1,4 @@
-#!/usr/bin/bash -ax
+#!/usr/bin/bash -x
 
 function hack_dapi_for_headnode_provisioning {
 
