@@ -1,6 +1,7 @@
 sdc-postsetup
 =============
 
+~~~~
 check this out from git, then extract/rsync the directory tree to
 (aka, to /mnt/usbkey/scripts/... )
 ... WITH THE USB-KEY mounted.
@@ -16,5 +17,7 @@ Files included here:
 /mnt/usbkey/scripts/post-setup-chores/create_cloudapi
 /mnt/usbkey/scripts/post-setup-chores/make_headnode_provisionable
 /mnt/usbkey/scripts/post-setup-chores/sdc-create-instance
+
+~~~~
 
 
