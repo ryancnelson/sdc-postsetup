@@ -2,21 +2,28 @@
 
 function hack_dapi_for_headnode_provisioning {
 
-    local cnapi_zone=$(vmadm lookup -1 alias=cnapi0)
+# use sapi to do this now:
 
-    # TODO: don't change if already done
-    echo "# Hack DAPI to allow headnode provisioning"
-    local config_path=/zones/$cnapi_zone/root/opt/smartdc/cnapi/sapi_manifests/cnapi/template
-grep hard-filter-headnode $config_path || exit
+sdc_uuid=$(sdc-sapi /services?name=sdc | json -Ha uuid)
+sdc-sapi /services/$sdc_uuid -X PUT -d '{ "metadata": { "ALLOC_FILTER_HEADNODE": "min-owner" } }'
 
-    sed -e "
-        s:hard-filter-headnode:identity:g;
-        s:hard-filter-min-ram:identity:g;
-        s:hard-filter-min-disk:identity:g;
-        s:hard-filter-min-cpu:identity:g;
-        " $config_path >$config_path.new
-    mv $config_path.new $config_path
-    svcadm -z $cnapi_zone restart config-agent
+## commented out all this othe stuff, which was a hack.
+
+#    local cnapi_zone=$(vmadm lookup -1 alias=cnapi0)
+#
+#    # TODO: don't change if already done
+#    echo "# Hack DAPI to allow headnode provisioning"
+#    local config_path=/zones/$cnapi_zone/root/opt/smartdc/cnapi/sapi_manifests/cnapi/template
+#grep hard-filter-headnode $config_path || exit
+#
+#    sed -e "
+#        s:hard-filter-headnode:identity:g;
+#        s:hard-filter-min-ram:identity:g;
+#        s:hard-filter-min-disk:identity:g;
+#        s:hard-filter-min-cpu:identity:g;
+#        " $config_path >$config_path.new
+#    mv $config_path.new $config_path
+#    svcadm -z $cnapi_zone restart config-agent
 }
 
 hack_dapi_for_headnode_provisioning
